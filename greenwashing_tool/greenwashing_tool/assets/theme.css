@@ -1,0 +1,218 @@
+/* ==========================================================================
+   DESIGN NOTES (kept for future edits)
+   --------------------------------------------------------------------------
+   Subject: financial + sustainability disclosure for 5 JSE food companies.
+   Idea: read like a ledger / annual report, not a generic SaaS dashboard.
+
+   COLOR (functional, not decorative — mirrors how an annual report uses a
+   colour key: gold for financial, sage for natural capital, rust for risk)
+     --ink        #0F1512   page background (warm-black, green cast)
+     --panel      #161D18   card / panel surface
+     --panel-alt  #1D2620   table headers, hover states
+     --hairline   #2B362F   borders / dividers
+     --paper      #EDEAE0   primary text (warm off-white, ledger paper)
+     --mute       #93A499   secondary text
+     --grain      #C9A227   primary accent — financial figures
+     --sage       #7A9E85   environmental / natural capital
+     --rust       #C1553F   risk / alert only — never decorative
+     --amber      #D98F4E   company accent (RCL Foods)
+     --slate      #5C7A99   governance / company accent (Libstar)
+
+   TYPE
+     Fraunces (serif) — headlines + hero KPI numbers only, one bold moment
+     Inter (sans, tabular-nums) — everything else, esp. data tables
+
+   LAYOUT
+     Sidebar = vertical list nav with a left gold bar on the active page,
+     not default radio pills. Page 1 = hero band. Target rows = left accent
+     bar (status colour), not bordered SaaS cards. Tables = hairline rows,
+     no zebra stripes, no shadows anywhere.
+   ========================================================================== */
+
+@import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&display=swap');
+
+:root{
+  --ink:#0F1512; --panel:#161D18; --panel-alt:#1D2620; --hairline:#2B362F;
+  --paper:#EDEAE0; --mute:#93A499;
+  --grain:#C9A227; --sage:#7A9E85; --rust:#C1553F; --amber:#D98F4E; --slate:#5C7A99;
+}
+
+html, body, [class*="css"]{
+  font-family:'Inter', -apple-system, sans-serif;
+  font-variant-numeric: tabular-nums;
+}
+
+.stApp{
+  background:
+    radial-gradient(1200px 500px at 15% -10%, rgba(201,162,39,0.06), transparent 60%),
+    var(--ink);
+  color: var(--paper);
+}
+
+/* ---- Headings ---- */
+h1, h2, h3{
+  font-family:'Fraunces', serif;
+  color: var(--paper);
+  font-weight: 600;
+  letter-spacing: -0.01em;
+}
+h1{ font-size: 2.1rem; font-optical-sizing: auto; border-bottom: 1px solid var(--hairline); padding-bottom: 0.5rem; margin-bottom: 0.3rem;}
+h3{ font-weight: 500; color: var(--paper); margin-top: 1.6rem; }
+p, li, span, label, div{ color: var(--paper); }
+.stCaption, [data-testid="stCaptionContainer"]{ color: var(--mute) !important; }
+
+/* ---- Sidebar ---- */
+[data-testid="stSidebar"]{
+  background: var(--panel);
+  border-right: 1px solid var(--hairline);
+}
+[data-testid="stSidebar"] h1{
+  font-size: 1.35rem; border-bottom: none; padding-bottom:0; margin-bottom:0;
+}
+[data-testid="stSidebar"] hr{ border-color: var(--hairline); }
+
+/* Sidebar radio -> vertical ledger nav */
+[data-testid="stSidebar"] [role="radiogroup"]{ gap: 2px; }
+[data-testid="stSidebar"] [role="radiogroup"] label{
+  border-left: 3px solid transparent;
+  padding: 8px 10px 8px 10px !important;
+  border-radius: 0 4px 4px 0;
+  transition: border-color .15s ease, background .15s ease;
+}
+[data-testid="stSidebar"] [role="radiogroup"] label:hover{
+  background: var(--panel-alt);
+}
+[data-testid="stSidebar"] [role="radiogroup"] label[data-checked="true"],
+[data-testid="stSidebar"] [role="radiogroup"] label:has(input:checked){
+  border-left: 3px solid var(--grain);
+  background: var(--panel-alt);
+}
+[data-testid="stSidebar"] [role="radiogroup"] input{ accent-color: var(--grain); }
+
+/* ---- Metrics (KPI numbers) ---- */
+[data-testid="stMetric"]{
+  background: transparent;
+  border-top: 1px solid var(--hairline);
+  padding-top: 10px;
+}
+[data-testid="stMetricValue"]{
+  font-family:'Fraunces', serif;
+  color: var(--grain);
+  font-weight: 600;
+  font-size: 1.9rem;
+}
+[data-testid="stMetricLabel"]{
+  color: var(--mute);
+  font-size: 0.82rem;
+  font-weight: 500;
+}
+[data-testid="stMetricDelta"]{ font-size: 0.8rem; }
+
+/* ---- Tables / dataframes ---- */
+[data-testid="stDataFrame"]{
+  border: 1px solid var(--hairline);
+  border-radius: 6px;
+  overflow: hidden;
+}
+[data-testid="stDataFrame"] [role="columnheader"]{
+  background: var(--panel-alt) !important;
+  color: var(--paper) !important;
+  font-weight: 600 !important;
+  border-bottom: 1px solid var(--hairline) !important;
+}
+[data-testid="stDataFrame"] [role="gridcell"]{
+  border-bottom: 1px solid var(--hairline) !important;
+}
+
+/* ---- Tabs ---- */
+[data-testid="stTabs"] [data-baseweb="tab-list"]{
+  border-bottom: 1px solid var(--hairline);
+  gap: 4px;
+}
+[data-testid="stTabs"] [data-baseweb="tab"]{
+  color: var(--mute);
+  font-weight: 500;
+}
+[data-testid="stTabs"] [aria-selected="true"]{
+  color: var(--grain) !important;
+  border-bottom-color: var(--grain) !important;
+}
+
+/* ---- Inputs ---- */
+[data-baseweb="select"] > div, .stMultiSelect [data-baseweb="select"] > div{
+  background: var(--panel) !important;
+  border-color: var(--hairline) !important;
+  border-radius: 6px !important;
+}
+[data-baseweb="tag"]{
+  background: rgba(201,162,39,0.16) !important;
+  border: 1px solid var(--grain) !important;
+  color: var(--paper) !important;
+}
+
+/* ---- Alerts / callouts ---- */
+[data-testid="stAlertContentInfo"]{ color: var(--paper); }
+div[data-baseweb="notification"]{ border-radius: 6px; }
+.stAlert{ border-radius: 6px; border: 1px solid var(--hairline) !important; }
+
+/* ---- Bordered containers (target cards) ---- */
+[data-testid="stVerticalBlockBorderWrapper"]{
+  border: none !important;
+  border-left: 3px solid var(--hairline) !important;
+  border-radius: 2px !important;
+  background: var(--panel) !important;
+  padding: 4px 4px 4px 14px !important;
+}
+
+/* ---- Expander ---- */
+[data-testid="stExpander"]{
+  border: 1px solid var(--hairline) !important;
+  border-radius: 6px !important;
+  background: var(--panel);
+}
+
+/* ---- Divider ---- */
+hr{ border-color: var(--hairline) !important; }
+
+/* ---- Custom classes used via st.markdown ---- */
+.hero{
+  padding: 18px 0 22px 0;
+  border-bottom: 1px solid var(--hairline);
+  margin-bottom: 18px;
+}
+.hero-eyebrow{
+  color: var(--mute); font-size: 0.85rem; margin: 0 0 2px 0;
+}
+.hero-title{
+  font-family:'Fraunces', serif; font-size: 2.6rem; font-weight: 600;
+  color: var(--paper); margin: 0; line-height: 1.05;
+}
+.hero-sub{ color: var(--mute); margin-top: 6px; font-size: 0.95rem; }
+
+.badge{
+  display:inline-block; padding: 2px 10px; border-radius: 20px;
+  font-size: 0.78rem; font-weight: 600; border: 1px solid transparent;
+}
+.badge-achieved{ color:#B7D3BE; background:rgba(122,158,133,0.16); border-color: var(--sage); }
+.badge-not-achieved{ color:#E9B7AC; background:rgba(193,85,63,0.16); border-color: var(--rust); }
+.badge-progress{ color:#EBD79A; background:rgba(201,162,39,0.16); border-color: var(--grain); }
+.badge-unknown{ color: var(--mute); background:rgba(147,164,153,0.14); border-color: var(--hairline); }
+
+.target-row{
+  border-left: 3px solid var(--hairline);
+  padding: 10px 0 10px 14px; margin-bottom: 6px;
+}
+.target-row.achieved{ border-left-color: var(--sage); }
+.target-row.not-achieved{ border-left-color: var(--rust); }
+.target-row.progress{ border-left-color: var(--grain); }
+
+.section-note{
+  font-size: 0.85rem; color: var(--mute); border-top: 1px dashed var(--hairline);
+  padding-top: 8px; margin-top: 4px;
+}
+
+.company-chip{
+  display:inline-flex; align-items:center; gap:6px; font-size:0.85rem; color: var(--mute);
+  margin-right: 14px;
+}
+.company-dot{ width:9px; height:9px; border-radius:50%; display:inline-block; }
